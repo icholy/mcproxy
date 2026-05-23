@@ -51,7 +51,7 @@ func startProxy(t *testing.T, upstreamURL string) string {
 	return ts.URL
 }
 
-func TestProxy_Passthrough(t *testing.T) {
+func TestUpstream_Dispatch(t *testing.T) {
 	proxyURL := startProxy(t, startUpstream(t))
 
 	c := mcp.NewClient(&mcp.Implementation{Name: "client", Version: "0"}, nil)
