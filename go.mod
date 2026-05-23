@@ -1,4 +1,4 @@
-module github.com/icholy/mcproxy
+module github.com/icholy/mcpswap
 
 go 1.26.2
 

@@ -12,7 +12,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/icholy/mcproxy"
+	"github.com/icholy/mcpswap"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
@@ -53,7 +53,7 @@ func run(configPath string, swapInterval time.Duration) error {
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 
-	up := mcproxy.NewUpstream(slog.Default())
+	up := mcpswap.NewUpstream(slog.Default())
 	if err := swap(ctx, up, cfg); err != nil {
 		slog.Warn("initial upstream connect failed; serving offline until it recovers", "err", err)
 	}
@@ -116,8 +116,8 @@ func run(configPath string, swapInterval time.Duration) error {
 
 // swap builds a fresh transport from cfg and swaps the upstream session.
 // A new transport is built each call since Swap consumes it.
-func swap(ctx context.Context, up *mcproxy.Upstream, cfg *fileConfig) error {
-	transport, err := mcproxy.BuildTransport(upstreamConfig(cfg))
+func swap(ctx context.Context, up *mcpswap.Upstream, cfg *fileConfig) error {
+	transport, err := mcpswap.BuildTransport(upstreamConfig(cfg))
 	if err != nil {
 		return fmt.Errorf("build transport: %w", err)
 	}
@@ -127,7 +127,7 @@ func swap(ctx context.Context, up *mcproxy.Upstream, cfg *fileConfig) error {
 }
 
 // swapLoop re-swaps the upstream session every interval until ctx is done.
-func swapLoop(ctx context.Context, up *mcproxy.Upstream, cfg *fileConfig, interval time.Duration) {
+func swapLoop(ctx context.Context, up *mcpswap.Upstream, cfg *fileConfig, interval time.Duration) {
 	ticker := time.NewTicker(interval)
 	defer ticker.Stop()
 	for {
@@ -163,8 +163,8 @@ func loadConfig(path string) (*fileConfig, error) {
 	return &cfg, nil
 }
 
-func upstreamConfig(cfg *fileConfig) mcproxy.TransportConfig {
-	tc := mcproxy.TransportConfig{
+func upstreamConfig(cfg *fileConfig) mcpswap.TransportConfig {
+	tc := mcpswap.TransportConfig{
 		Transport: cfg.Upstream.Transport,
 		Command:   cfg.Upstream.Command,
 		Args:      cfg.Upstream.Args,

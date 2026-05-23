@@ -1,9 +1,9 @@
-// Package mcproxy is a single-upstream MCP adapter. It fronts one
+// Package mcpswap is a single-upstream MCP adapter. It fronts one
 // upstream MCP server (stdio, SSE, or streamable-HTTP) and exposes it
 // over an HTTP endpoint, atomically hot-swapping the upstream session
 // on demand via Upstream.Swap. Credential/rotation policy lives with
 // the caller: build a fresh TransportConfig and call Swap.
-package mcproxy
+package mcpswap
 
 import (
 	"fmt"

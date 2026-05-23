@@ -1,4 +1,4 @@
-package mcproxy
+package mcpswap
 
 import (
 	"context"
